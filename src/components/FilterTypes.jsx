@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { DataContext } from '../context/DataContext';
 
 function FilterTypes({ filtersData }) {
-  console.log(filtersData);
+  const { setFilter, setIsFilter, isFilter } = useContext(DataContext);
+
+  const onClick = ({ target }) => {
+    setFilter(target.value);
+    setIsFilter(!isFilter);
+  };
+
   return (
     <div>
       {
-        filtersData.map((filter, index) => (
+        filtersData.map((filters, index) => (
           <button
-            key={ `${filter.strCategory}${index}` }
+            key={ `${filters.strCategory}${index}` }
             type="button"
-            data-testid={ `${filter.strCategory}-category-filter` }
+            data-testid={ `${filters.strCategory}-category-filter` }
+            value={ filters.strCategory.toLowerCase() }
+            onClick={ onClick }
           >
-            { filter.strCategory }
+            { filters.strCategory }
           </button>
         ))
       }

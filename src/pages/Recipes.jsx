@@ -16,9 +16,10 @@ function Recipes() {
   const [dataApi, setDataApi] = useState([]);
   const [filtersData, setFiltersData] = useState([]);
   const [foodType, setFoodType] = useState(true);
-  const { isLoading, getFetch } = useContext(DataContext);
+  const { isLoading, getFetch, filter, isFilter, setIsFilter } = useContext(DataContext);
+  const [filterResult, setFilterResult] = useState([]);
+  // const [showFilterResult, setShowFilterResult] = useState(false);
   const id = useParams();
-  
   const pageName = usePageName();
 
   useEffect(() => {
@@ -45,13 +46,51 @@ function Recipes() {
     getDataApi();
   }, [id]);
 
+  useEffect(() => {
+    const getDataFilterResult = async () => {
+      if (id.id === 'meals') {
+        const data = await getFetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${filter}`);
+        console.log(data.meals);
+        if (data.meals) {
+          data.meals.splice(NUMBER12, data.meals.length - 1);
+          console.log(data.meals);
+          setFilterResult(data.meals);
+        }
+        // setShowFilterResult(true);
+      }
+      if (id.id === 'drinks') {
+        const data = await getFetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${filter}s`);
+        if (data.drinks) {
+          data.drinks.splice(NUMBER12, data.drinks.length - 1);
+          console.log(data);
+          setFilterResult(data.drinks);
+        }
+        // setShowFilterResult(true);
+      }
+    };
+    if (filter) {
+      getDataFilterResult();
+    }
+  }, [filter]);
+
+  const clearFilters = () => {
+    setIsFilter(false);
+  };
+
   return (
     <div>
       <Header pageName={ pageName } />
-      { isLoading && <h2>Loading...</h2> }
       <FilterTypes filtersData={ filtersData } />
-      { foodType ? <RecipesMeals dataApi={ dataApi } />
-        : <RecipesDrinks dataApi={ dataApi } /> }
+      <button
+        type="button"
+        data-testid="All-category-filter"
+        onClick={ clearFilters }
+      >
+        All
+      </button>
+      { isLoading && <h2>Loading...</h2> }
+      { foodType ? <RecipesMeals dataApi={ isFilter ? filterResult : dataApi } />
+        : <RecipesDrinks dataApi={ isFilter ? filterResult : dataApi } /> }
     </div>
   );
 }
