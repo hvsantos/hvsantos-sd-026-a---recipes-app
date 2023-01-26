@@ -1,31 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import MealDetail from '../components/screens/RecipeDetails/MealDetail';
+import DrinksDetails from '../components/screens/RecipeDetails/DrinksDetail';
+import Loading from '../components/Loading';
 
 function RecipeDetails(props) {
-  const [recipe, setRecipe] = useState({});
+  const [recipe, setRecipe] = useState(null);
+  // Remover o error e o catch abaixo após concluido
   const [error, setError] = useState(false);
   const { match: { params: { id }, url } } = props;
+  const where = url.split('/')[1];
 
   useEffect(() => {
-    const where = url.split('/')[1];
     const fetchUrl = where === 'meals'
       ? 'https://www.themealdb.com/api/json/v1/1/lookup.php?i='
       : 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
 
     fetch(fetchUrl + id)
       .then((response) => response.json())
-      .then((response) => setRecipe(response.meals[0]))
+      .then((response) => setRecipe(response))
       .catch((err) => {
         console.log(err);
         setError(true);
       });
-  }, [url, id]);
-  console.log(recipe);
+  }, [url, id, where]);
   console.log(error);
-
-  return (
-    <div>RecipeDetails</div>
-  );
+  if (!recipe) {
+    return <Loading />;
+  }
+  return where === 'meals'
+    ? <MealDetail meal={ recipe.meals } />
+    : <DrinksDetails drinks={ recipe.drinks } />;
 }
 
 export default RecipeDetails;
