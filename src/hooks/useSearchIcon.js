@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import SearchInput from '../components/Search/SearchInput';
 import searchIcon from '../images/searchIcon.svg';
 
 const useSearchIcon = (pageName) => {
@@ -20,6 +21,7 @@ const useSearchIcon = (pageName) => {
   return (
     <>
       <button
+        style={ { backgroundColor: 'transparent', border: 'none' } }
         onClick={ showRemoveSearch }
       >
         <img
@@ -31,7 +33,7 @@ const useSearchIcon = (pageName) => {
           alt="search-icon"
         />
       </button>
-      { search === true ? <input type="text" data-testid="search-input" /> : null }
+      { search === true ? <SearchInput /> : null }
     </>
   );
 };
