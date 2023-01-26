@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import Header from '../components/Header';
+import usePageName from '../hooks/usePageName';
 import { DataContext } from '../context/DataContext';
 import RecipesDrinks from '../components/RecipesDrinks';
 import RecipesMeals from '../components/RecipesMeals';
@@ -16,6 +18,8 @@ function Recipes() {
   const [foodType, setFoodType] = useState(true);
   const { isLoading, getFetch } = useContext(DataContext);
   const id = useParams();
+  
+  const pageName = usePageName();
 
   useEffect(() => {
     const getDataApi = async () => {
@@ -43,6 +47,7 @@ function Recipes() {
 
   return (
     <div>
+      <Header pageName={ pageName } />
       { isLoading && <h2>Loading...</h2> }
       <FilterTypes filtersData={ filtersData } />
       { foodType ? <RecipesMeals dataApi={ dataApi } />

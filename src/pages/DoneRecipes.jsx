@@ -1,8 +1,14 @@
 import React from 'react';
+import usePageName from '../hooks/usePageName';
+import Header from '../components/Header';
 
 function DoneRecipes() {
+  const pageName = usePageName();
   return (
-    <div>DoneRecipes</div>
+    <div>
+      <Header pageName={ pageName } />
+      DoneRecipes
+    </div>
   );
 }
 

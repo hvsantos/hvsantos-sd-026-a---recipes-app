@@ -1,8 +1,14 @@
 import React from 'react';
+import usePageName from '../hooks/usePageName';
+import Header from '../components/Header';
 
 function Profile() {
+  const pageName = usePageName();
   return (
-    <div>Profile</div>
+    <div>
+      <Header pageName={ pageName } />
+      Profile
+    </div>
   );
 }
 
