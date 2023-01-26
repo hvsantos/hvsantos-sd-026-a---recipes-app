@@ -56,7 +56,6 @@ function Recipes() {
           console.log(data.meals);
           setFilterResult(data.meals);
         }
-        // setShowFilterResult(true);
       }
       if (id.id === 'drinks') {
         const data = await getFetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${filter}s`);
@@ -65,7 +64,6 @@ function Recipes() {
           console.log(data);
           setFilterResult(data.drinks);
         }
-        // setShowFilterResult(true);
       }
     };
     if (filter) {
