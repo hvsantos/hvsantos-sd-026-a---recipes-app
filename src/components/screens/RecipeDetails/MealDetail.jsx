@@ -28,7 +28,6 @@ export default function MealDetail(props) {
       }
     }
   }, [recipe]);
-  console.log(recipe);
   return (
     <div>
       <img

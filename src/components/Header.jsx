@@ -1,6 +1,7 @@
 import React from 'react';
+// import PropTypes from 'prop-types';
 import SearchBar from './SearchBar';
-import profileTopButton from '../images/profileIcon.svg';
+// import profileTopButton from '../images/profileIcon.svg';
 import useSearchIcon from '../hooks/useSearchIcon';
 import useProfileIcon from '../hooks/useProfileIcon';
 
@@ -20,3 +21,5 @@ function Header({ pageName }) {
 }
 
 export default Header;
+
+Header.propTypes = {}.isRequired;

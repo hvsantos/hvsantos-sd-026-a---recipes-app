@@ -9,7 +9,6 @@ export default function DrinksDetail(props) {
     height: '200px',
     width: '200px',
   };
-  console.log(recipe);
   useEffect(() => {
     const ingred = 'strIngredient';
     const measure = 'strMeasure';
