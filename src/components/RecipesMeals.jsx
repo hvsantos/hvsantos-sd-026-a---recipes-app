@@ -10,7 +10,6 @@ function RecipesMeals({ dataApi }) {
             key={ index }
             data-testid={ `${index}-recipe-card` }
           >
-            test
             <p data-testid={ `${index}-card-name` }>{ food.strMeal }</p>
             <img
               src={ food.strMealThumb }
