@@ -1,21 +1,15 @@
 import React from 'react';
 import SearchBar from './SearchBar';
 import profileTopButton from '../images/profileIcon.svg';
-import useSearchIcon from '../hooks/showSearchButton';
+import useSearchIcon from '../hooks/useSearchIcon';
+import useProfileIcon from '../hooks/useProfileIcon';
 
 function Header({ pageName }) {
   const searchIcon = useSearchIcon(pageName);
+  const profileIcon = useProfileIcon();
   return (
     <div>
-      <object
-        data-testid="profile-top-btn"
-        className="profile-top-btn"
-        type="image/svg+xml"
-        data={ profileTopButton }
-        src={ profileTopButton }
-      >
-        profile-top-btn
-      </object>
+      { profileIcon }
       { searchIcon }
       <h1 data-testid="page-title">
         { pageName }

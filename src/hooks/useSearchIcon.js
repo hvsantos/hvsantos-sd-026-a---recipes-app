@@ -5,7 +5,8 @@ const useSearchIcon = (pageName) => {
     || pageName === 'Done Recipes'
     || pageName === 'Favorite Recipes') {
     return (null);
-  } return (
+  }
+  return (
     <object
       data-testid="search-top-btn"
       className="search-top-btn"
