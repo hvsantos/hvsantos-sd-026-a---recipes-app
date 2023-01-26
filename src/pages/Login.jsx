@@ -17,7 +17,6 @@ function Login() {
     const validEmail = login.userEmail.match(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/);
     const validLogin = validEmail && login.password.length > NUMBER6;
     setBtnDisable(!validLogin);
-    console.log(validEmail);
   }, [login]);
 
   const handleSubmit = () => {
