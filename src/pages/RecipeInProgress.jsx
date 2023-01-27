@@ -6,12 +6,15 @@ import { DataContext } from '../context/DataContext';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
+const arrTest = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+  '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
+
 function RecipeInProgress(props) {
   const { getFetch } = useContext(DataContext);
   const [recipeInfo, setRecipeInfo] = useState({});
   const [foodType, setFoodType] = useState(true);
   const [copy, setCopy] = useState(false);
-  // const id = useParams();
+  const [checked, steChecked] = useState([]);
   const { match: { params: { id }, url } } = props;
   const where = url.split('/')[1];
 
@@ -24,6 +27,22 @@ function RecipeInProgress(props) {
       const dataApi = await getFetch(fetchUrl + id);
       setRecipeInfo(dataApi[Object.keys(dataApi)][0]);
       setFoodType(Object.keys(dataApi)[0] === 'meals');
+      const dataApitest = dataApi[Object.keys(dataApi)][0];
+      const check = () => {
+        let arrCheck = [];
+        arrTest.forEach((el) => {
+          if (dataApitest[`strIngredient${el}`]) {
+            const checkList = {
+              ingredient: dataApitest[`strIngredient${el}`],
+              measure: dataApitest[`strMeasure${el}`],
+              checked: false,
+            };
+            arrCheck = [...arrCheck, checkList];
+          }
+        });
+        steChecked(arrCheck);
+      };
+      check();
     };
     getDataApi();
   }, []);
@@ -59,23 +78,42 @@ function RecipeInProgress(props) {
       {
         recipeInfo && (
           <div>
-            <h2
-              data-testid="recipe-title"
-            >
-              { foodType ? recipeInfo.strMeal : recipeInfo.strDrink }
-            </h2>
-            <img
-              src={ foodType ? recipeInfo.strMealThumb : recipeInfo.strDrinkThumb }
-              alt={ foodType ? recipeInfo.idMeal : recipeInfo.idDrink }
-              width="180px"
-              data-testid="recipe-photo"
-            />
-            <p data-testid="recipe-category">
-              { recipeInfo.strCategory }
-            </p>
-            <p data-testid="instructions">
-              { recipeInfo.strInstructions }
-            </p>
+            <div>
+              <h2
+                data-testid="recipe-title"
+              >
+                { foodType ? recipeInfo.strMeal : recipeInfo.strDrink }
+              </h2>
+              <img
+                src={ foodType ? recipeInfo.strMealThumb : recipeInfo.strDrinkThumb }
+                alt={ foodType ? recipeInfo.idMeal : recipeInfo.idDrink }
+                width="180px"
+                data-testid="recipe-photo"
+              />
+              <p data-testid="recipe-category">
+                { recipeInfo.strCategory }
+              </p>
+              <p data-testid="instructions">
+                { recipeInfo.strInstructions }
+              </p>
+            </div>
+            <div>
+              {
+                checked && checked.map((item, index) => (
+                  <label
+                    key={ index }
+                    htmlFor="ingredient"
+                    data-testid={ `${index}-ingredient-step` }
+                  >
+                    <input
+                      type="checkbox"
+                      checked={ item.checked }
+                    />
+                    { `${item.measure} ${item.ingredient}` }
+                  </label>
+                ))
+              }
+            </div>
           </div>
         )
       }
