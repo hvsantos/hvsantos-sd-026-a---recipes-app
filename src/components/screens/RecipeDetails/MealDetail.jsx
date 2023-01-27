@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Video from './Video';
+import Recomendations from './Recomendations';
 
 export default function MealDetail(props) {
   const [arrIng, setArrIng] = useState([]);
@@ -51,6 +52,7 @@ export default function MealDetail(props) {
       </ul>
       <Video videoUrl={ recipe.strYoutube } />
       <p data-testid="instructions">{ recipe.strInstructions }</p>
+      <Recomendations type="drinks" />
     </div>
   );
 }

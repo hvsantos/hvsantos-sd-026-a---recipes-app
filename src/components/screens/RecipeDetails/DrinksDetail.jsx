@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Recomendations from './Recomendations';
+
+const style = {
+  height: '200px',
+  width: '200px',
+};
 
 export default function DrinksDetail(props) {
   const [arrIng, setArrIng] = useState([]);
   const { drinks } = props;
   const recipe = drinks[0];
-  const style = {
-    height: '200px',
-    width: '200px',
-  };
   useEffect(() => {
     const ingred = 'strIngredient';
     const measure = 'strMeasure';
@@ -49,6 +51,7 @@ export default function DrinksDetail(props) {
         ))}
       </ul>
       <p data-testid="instructions">{ recipe.strInstructions }</p>
+      <Recomendations type="meals" />
     </div>
   );
 }
