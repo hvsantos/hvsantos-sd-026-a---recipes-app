@@ -49,7 +49,7 @@ function Recipes() {
       }
     };
     getDataApi();
-  }, [id]);
+  }, [id, getFetch]);
 
   const getDataFilterResult = async () => {
     console.log(filter);
