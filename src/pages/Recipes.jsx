@@ -16,9 +16,10 @@ function Recipes() {
   const [dataApi, setDataApi] = useState([]);
   const [filtersData, setFiltersData] = useState([]);
   const [foodType, setFoodType] = useState(true);
-  const { isLoading, getFetch } = useContext(DataContext);
+  const { isLoading, getFetch, filter, isFilter, setIsFilter,
+    setFilter } = useContext(DataContext);
+  const [filterResult, setFilterResult] = useState([]);
   const id = useParams();
-  
   const pageName = usePageName();
 
   useEffect(() => {
@@ -26,32 +27,75 @@ function Recipes() {
       if (id.id === 'meals') {
         const data = await getFetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
         const dataFilters = await getFetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
-        data.meals.splice(NUMBER12, NUMBER13);
-        dataFilters.meals.splice(NUMBER5, NUMBER9);
-        setDataApi(data.meals);
-        setFiltersData(dataFilters.meals);
-        setFoodType(true);
+        if (data.meals) {
+          data.meals.splice(NUMBER12, NUMBER13);
+          dataFilters.meals.splice(NUMBER5, NUMBER9);
+          setDataApi(data.meals);
+          setFiltersData(dataFilters.meals);
+          setFoodType(true);
+        }
       }
       if (id.id === 'drinks') {
         const data = await getFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const dataFilters = await getFetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
-        data.drinks.splice(NUMBER12, NUMBER13);
-        dataFilters.drinks.splice(NUMBER5, NUMBER9);
-        setDataApi(data.drinks);
-        setFiltersData(dataFilters.drinks);
-        setFoodType(false);
+        if (data.drinks) {
+          console.log(data.drinks);
+          data.drinks.splice(NUMBER12, NUMBER13);
+          dataFilters.drinks.splice(NUMBER5, NUMBER9);
+          setDataApi(data.drinks);
+          setFiltersData(dataFilters.drinks);
+          setFoodType(false);
+        }
       }
     };
     getDataApi();
-  }, [id]);
+  }, [id, getFetch]);
+
+  const getDataFilterResult = async () => {
+    console.log(filter);
+    if (id.id === 'meals') {
+      const data = await getFetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${filter}`);
+      if (data.meals) {
+        data.meals.splice(NUMBER12, data.meals.length - 1);
+        setFilterResult(data.meals);
+        setIsFilter(true);
+      }
+    }
+    if (id.id === 'drinks') {
+      const data = await getFetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${filter}`);
+      if (data.drinks) {
+        data.drinks.splice(NUMBER12, data.drinks.length - 1);
+        setFilterResult(data.drinks);
+        setIsFilter(true);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (filter) {
+      getDataFilterResult();
+    }
+  }, [filter]);
+
+  const clearFilters = () => {
+    setIsFilter(false);
+    setFilter('');
+  };
 
   return (
     <div>
       <Header pageName={ pageName } />
-      { isLoading && <h2>Loading...</h2> }
       <FilterTypes filtersData={ filtersData } />
-      { foodType ? <RecipesMeals dataApi={ dataApi } />
-        : <RecipesDrinks dataApi={ dataApi } /> }
+      <button
+        type="button"
+        data-testid="All-category-filter"
+        onClick={ clearFilters }
+      >
+        All
+      </button>
+      { isLoading && <h2>Loading...</h2> }
+      { foodType ? <RecipesMeals dataApi={ isFilter ? filterResult : dataApi } />
+        : <RecipesDrinks dataApi={ isFilter ? filterResult : dataApi } /> }
     </div>
   );
 }
