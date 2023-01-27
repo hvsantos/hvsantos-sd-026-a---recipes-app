@@ -8,7 +8,6 @@ function FilterTypes({ filtersData }) {
   const onClick = ({ target }) => {
     if (target.value !== filter) {
       setFilter(target.value);
-      setIsFilter(true);
     }
     if (target.value === filter) {
       setIsFilter(!isFilter);
@@ -23,7 +22,7 @@ function FilterTypes({ filtersData }) {
             key={ `${filters.strCategory}${index}` }
             type="button"
             data-testid={ `${filters.strCategory}-category-filter` }
-            value={ filters.strCategory.toLowerCase() }
+            value={ filters.strCategory }
             onClick={ onClick }
           >
             { filters.strCategory }
