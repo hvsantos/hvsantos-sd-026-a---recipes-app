@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import clipboardCopy from 'clipboard-copy';
 
 import MealDetail from '../components/screens/RecipeDetails/MealDetail';
 import DrinksDetails from '../components/screens/RecipeDetails/DrinksDetail';
 import Loading from '../components/Loading';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function RecipeDetails(props) {
   const [recipe, setRecipe] = useState(null);
   const [redirect, setRedirect] = useState(false);
+  const [copy, setCopy] = useState(false);
   // Tirar o comentario somente SE necessario tratamento de erro
   // const [error, setError] = useState(false);
   const { match: { params: { id }, url } } = props;
@@ -28,6 +32,15 @@ function RecipeDetails(props) {
       });
   }, [url, id, where]);
 
+  function handleShare() {
+    // const timeAlert = 2000;
+    clipboardCopy(`http://localhost:3000${url}`);
+    setCopy(true);
+    // setTimeout(() => {
+    //   setCopy(false);
+    // }, timeAlert);
+  }
+
   if (!recipe) {
     return <Loading />;
   }
@@ -43,20 +56,28 @@ function RecipeDetails(props) {
           display: 'flex',
           flexDirection: 'column',
           position: 'fixed',
-          left: '85%',
+          left: '80%',
         } }
       >
         <button
           type="button"
           data-testid="share-btn"
+          onClick={ handleShare }
         >
-          Compartilhar
+          <img
+            src={ shareIcon }
+            alt="share-button"
+          />
         </button>
+        { copy ? <p>Link copied!</p> : '' }
         <button
           type="button"
           data-testid="favorite-btn"
         >
-          Favoritar
+          <img
+            src={ whiteHeartIcon }
+            alt="favorite-button"
+          />
         </button>
       </div>
       { where === 'meals'
