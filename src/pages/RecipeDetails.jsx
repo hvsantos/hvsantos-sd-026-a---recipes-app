@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
-
+import { DataContext } from '../context/DataContext';
 import MealDetail from '../components/screens/RecipeDetails/MealDetail';
 import DrinksDetails from '../components/screens/RecipeDetails/DrinksDetail';
 import { saveItem, getItem } from '../components/localStorage';
@@ -11,7 +11,7 @@ import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function RecipeDetails(props) {
-  const [recipe, setRecipe] = useState(null);
+  const { recipe, setRecipe } = useContext(DataContext);
   const [redirect, setRedirect] = useState(false);
   const [copy, setCopy] = useState(false);
   const { match: { params: { id }, url } } = props;

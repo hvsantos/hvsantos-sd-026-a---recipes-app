@@ -8,15 +8,18 @@ function DataProvider({ children }) {
   const { isLoading, getFetch } = useFetch();
   const [filter, setFilter] = useState('');
   const [isFilter, setIsFilter] = useState(false);
+  const [recipe, setRecipe] = useState(null);
 
   const contextValue = useMemo(() => ({
+    setRecipe,
+    recipe,
     isLoading,
     getFetch,
     filter,
     setFilter,
     isFilter,
     setIsFilter,
-  }), [isLoading, filter, setFilter, isFilter]);
+  }), [isLoading, filter, setFilter, isFilter, recipe, setRecipe]);
 
   return (
     <DataContext.Provider value={ contextValue }>

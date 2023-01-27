@@ -39,7 +39,6 @@ function Recipes() {
         const data = await getFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const dataFilters = await getFetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
         if (data.drinks) {
-          console.log(data.drinks);
           data.drinks.splice(NUMBER12, NUMBER13);
           dataFilters.drinks.splice(NUMBER5, NUMBER9);
           setDataApi(data.drinks);
@@ -49,7 +48,7 @@ function Recipes() {
       }
     };
     getDataApi();
-  }, [id, getFetch]);
+  }, [id]);
 
   const getDataFilterResult = async () => {
     console.log(filter);
