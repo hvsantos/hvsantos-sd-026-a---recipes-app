@@ -52,6 +52,12 @@ function RecipeInProgress(props) {
     setCopy(true);
   }
 
+  function handleChecked({ target }) {
+    const checkTest = [...checked];
+    checkTest[target.value].checked = !checked[target.value].checked;
+    steChecked(checkTest);
+  }
+
   return (
     <div>
       <button
@@ -104,10 +110,15 @@ function RecipeInProgress(props) {
                     key={ index }
                     htmlFor="ingredient"
                     data-testid={ `${index}-ingredient-step` }
+                    style={ { textDecoration: item.checked
+                      ? 'line-through solid rgb(0, 0, 0)' : '' } }
                   >
                     <input
                       type="checkbox"
+                      name="ingredient"
+                      value={ index }
                       checked={ item.checked }
+                      onClick={ handleChecked }
                     />
                     { `${item.measure} ${item.ingredient}` }
                   </label>
