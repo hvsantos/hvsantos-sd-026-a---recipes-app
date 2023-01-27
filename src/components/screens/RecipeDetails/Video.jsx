@@ -5,7 +5,6 @@ export default function Video(props) {
   const { videoUrl } = props;
   const urlReplaced = videoUrl
     .replace('watch?v=', 'embed/');
-  console.log(videoUrl);
   return (
     <iframe
       width="560"
