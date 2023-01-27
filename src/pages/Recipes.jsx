@@ -18,7 +18,7 @@ function Recipes() {
   const [foodType, setFoodType] = useState(true);
   const { isLoading, getFetch } = useContext(DataContext);
   const id = useParams();
-  
+
   const pageName = usePageName();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function Recipes() {
       }
     };
     getDataApi();
-  }, [id]);
+  }, [id, getFetch]);
 
   return (
     <div>

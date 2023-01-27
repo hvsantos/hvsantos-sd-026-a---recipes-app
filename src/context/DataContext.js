@@ -10,7 +10,7 @@ function DataProvider({ children }) {
   const contextValue = useMemo(() => ({
     isLoading,
     getFetch,
-  }), [isLoading]);
+  }), [isLoading, getFetch]);
 
   return (
     <DataContext.Provider value={ contextValue }>
