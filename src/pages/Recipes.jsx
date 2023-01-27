@@ -18,7 +18,6 @@ function Recipes() {
   const [foodType, setFoodType] = useState(true);
   const { isLoading, getFetch, filter, isFilter, setIsFilter } = useContext(DataContext);
   const [filterResult, setFilterResult] = useState([]);
-  // const [showFilterResult, setShowFilterResult] = useState(false);
   const id = useParams();
   const pageName = usePageName();
 
@@ -27,20 +26,24 @@ function Recipes() {
       if (id.id === 'meals') {
         const data = await getFetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
         const dataFilters = await getFetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
-        data.meals.splice(NUMBER12, NUMBER13);
-        dataFilters.meals.splice(NUMBER5, NUMBER9);
-        setDataApi(data.meals);
-        setFiltersData(dataFilters.meals);
-        setFoodType(true);
+        if (data.meals) {
+          data.meals.splice(NUMBER12, NUMBER13);
+          dataFilters.meals.splice(NUMBER5, NUMBER9);
+          setDataApi(data.meals);
+          setFiltersData(dataFilters.meals);
+          setFoodType(true);
+        }
       }
       if (id.id === 'drinks') {
         const data = await getFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const dataFilters = await getFetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
-        data.drinks.splice(NUMBER12, NUMBER13);
-        dataFilters.drinks.splice(NUMBER5, NUMBER9);
-        setDataApi(data.drinks);
-        setFiltersData(dataFilters.drinks);
-        setFoodType(false);
+        if (data.drinks) {
+          data.drinks.splice(NUMBER12, NUMBER13);
+          dataFilters.drinks.splice(NUMBER5, NUMBER9);
+          setDataApi(data.drinks);
+          setFiltersData(dataFilters.drinks);
+          setFoodType(false);
+        }
       }
     };
     getDataApi();
@@ -50,18 +53,15 @@ function Recipes() {
     const getDataFilterResult = async () => {
       if (id.id === 'meals') {
         const data = await getFetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${filter}`);
-        console.log(data.meals);
         if (data.meals) {
           data.meals.splice(NUMBER12, data.meals.length - 1);
-          console.log(data.meals);
           setFilterResult(data.meals);
         }
       }
       if (id.id === 'drinks') {
-        const data = await getFetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${filter}s`);
+        const data = await getFetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${filter}`);
         if (data.drinks) {
           data.drinks.splice(NUMBER12, data.drinks.length - 1);
-          console.log(data);
           setFilterResult(data.drinks);
         }
       }

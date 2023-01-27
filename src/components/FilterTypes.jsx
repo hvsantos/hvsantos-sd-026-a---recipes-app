@@ -3,11 +3,16 @@ import PropTypes from 'prop-types';
 import { DataContext } from '../context/DataContext';
 
 function FilterTypes({ filtersData }) {
-  const { setFilter, setIsFilter, isFilter } = useContext(DataContext);
+  const { setFilter, setIsFilter, isFilter, filter } = useContext(DataContext);
 
   const onClick = ({ target }) => {
-    setFilter(target.value);
-    setIsFilter(!isFilter);
+    if (target.value !== filter) {
+      setFilter(target.value);
+      setIsFilter(true);
+    }
+    if (target.value === filter) {
+      setIsFilter(!isFilter);
+    }
   };
 
   return (

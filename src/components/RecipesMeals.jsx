@@ -1,23 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 function RecipesMeals({ dataApi }) {
   return (
     <div>
       {
         dataApi.map((food, index) => (
-          <div
+          <Link
+            to={ `/meals/${food.idMeal}` }
             key={ index }
-            data-testid={ `${index}-recipe-card` }
           >
-            <p data-testid={ `${index}-card-name` }>{ food.strMeal }</p>
-            <img
-              src={ food.strMealThumb }
-              alt={ food.id }
-              width="100px"
-              data-testid={ `${index}-card-img` }
-            />
-          </div>
+            <div
+              data-testid={ `${index}-recipe-card` }
+            >
+              <p data-testid={ `${index}-card-name` }>{ food.strMeal }</p>
+              <img
+                src={ food.strMealThumb }
+                alt={ food.id }
+                width="100px"
+                data-testid={ `${index}-card-img` }
+              />
+            </div>
+          </Link>
         ))
       }
     </div>
