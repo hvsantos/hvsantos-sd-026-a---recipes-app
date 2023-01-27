@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
+
 import MealDetail from '../components/screens/RecipeDetails/MealDetail';
 import DrinksDetails from '../components/screens/RecipeDetails/DrinksDetail';
 import Loading from '../components/Loading';
 
 function RecipeDetails(props) {
   const [recipe, setRecipe] = useState(null);
+  const [redirect, setRedirect] = useState(false);
   // Tirar o comentario somente SE necessario tratamento de erro
   // const [error, setError] = useState(false);
   const { match: { params: { id }, url } } = props;
@@ -24,11 +27,38 @@ function RecipeDetails(props) {
         // setError(true);
       });
   }, [url, id, where]);
+
   if (!recipe) {
     return <Loading />;
   }
+
+  if (redirect) {
+    return <Redirect to={ `${url}/in-progress` } />;
+  }
+
   return (
     <div>
+      <div
+        style={ {
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'fixed',
+          left: '85%',
+        } }
+      >
+        <button
+          type="button"
+          data-testid="share-btn"
+        >
+          Compartilhar
+        </button>
+        <button
+          type="button"
+          data-testid="favorite-btn"
+        >
+          Favoritar
+        </button>
+      </div>
       { where === 'meals'
         ? <MealDetail meal={ recipe.meals } />
         : <DrinksDetails drinks={ recipe.drinks } /> }
@@ -41,6 +71,7 @@ function RecipeDetails(props) {
           left: '50%',
           transform: 'translateX(-50%)',
         } }
+        onClick={ () => setRedirect(true) }
       >
         Start Recipe
       </button>
