@@ -38,6 +38,27 @@ function RecipeDetails(props) {
 
   return (
     <div>
+      <div
+        style={ {
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'fixed',
+          left: '85%',
+        } }
+      >
+        <button
+          type="button"
+          data-testid="share-btn"
+        >
+          Compartilhar
+        </button>
+        <button
+          type="button"
+          data-testid="favorite-btn"
+        >
+          Favoritar
+        </button>
+      </div>
       { where === 'meals'
         ? <MealDetail meal={ recipe.meals } />
         : <DrinksDetails drinks={ recipe.drinks } /> }
