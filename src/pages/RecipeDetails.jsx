@@ -25,7 +25,6 @@ function RecipeDetails(props) {
     fetch(fetchUrl + id)
       .then((response) => response.json())
       .then((response) => setRecipe(response));
-    console.log(getItem('test'));
   }, [url, id, where]);
 
   function handleShare() {

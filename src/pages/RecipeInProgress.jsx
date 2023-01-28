@@ -76,7 +76,6 @@ function RecipeInProgress(props) {
       [id]: checkTest,
     };
     saveItem('test', test3);
-    console.log(where);
   }
 
   return (
