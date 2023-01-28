@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 // import { useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
+import { useHistory } from 'react-router-dom';
 import { DataContext } from '../context/DataContext';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -11,6 +12,7 @@ const arrTest = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
   '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
 
 function RecipeInProgress(props) {
+  const history = useHistory();
   const { getFetch } = useContext(DataContext);
   const [recipeInfo, setRecipeInfo] = useState({});
   const [foodType, setFoodType] = useState(true);
@@ -31,6 +33,7 @@ function RecipeInProgress(props) {
       }
       const dataApi = await getFetch(fetchUrl + id);
       setRecipeInfo(dataApi[Object.keys(dataApi)][0]);
+      console.log(dataApi[Object.keys(dataApi)][0]);
       setFoodType(Object.keys(dataApi)[0] === 'meals');
       const dataApitest = dataApi[Object.keys(dataApi)][0];
       const check = () => {
@@ -75,8 +78,6 @@ function RecipeInProgress(props) {
       return valid;
     }, true);
     setIsButtonDisabled(!validBTn);
-    console.log(validBTn);
-    // setIsButtonDisabled(!validBTn);
     setChecked(checkTest);
     const test3 = getItem('test');
     test3[where] = {
@@ -84,6 +85,48 @@ function RecipeInProgress(props) {
       [id]: checkTest,
     };
     saveItem('test', test3);
+  }
+
+  function handleFinishRecipe() {
+    if (!getItem('doneRecipes')) {
+      saveItem('doneRecipes', []);
+    }
+    // const recipe = checked.map((el) => el.ingredient);
+    let storage = getItem('doneRecipes');
+    // console.log(recipeInfo.strTags.split(','));
+    console.log(recipeInfo.strTags);
+    // const tag = recipeInfo.strTags ? recipeInfo.strTags(() => {})
+    if (where === 'meals') {
+      storage = [...storage, {
+        alcoholicOrNot: '',
+        id: recipeInfo.idMeal,
+        nationality: recipeInfo.strArea ? recipeInfo.strArea : '',
+        name: recipeInfo.strMeal,
+        category: recipeInfo.strCategory ? recipeInfo.strCategory : '',
+        image: recipeInfo.strMealThumb,
+        tags: recipeInfo.strTags ? recipeInfo.strTags.split(',') : '',
+        type: 'meal',
+        doneDate: new Date(),
+      }];
+    } else {
+      storage = [...storage, {
+        alcoholicOrNot: recipeInfo.strAlcoholic,
+        id: recipeInfo.idDrink,
+        nationality: recipeInfo.strArea ? recipeInfo.strArea : '',
+        name: recipeInfo.strDrink,
+        category: recipeInfo.strCategory ? recipeInfo.strCategory : '',
+        image: recipeInfo.strDrinkThumb,
+        tags: recipeInfo.strTags ? recipeInfo.strTags.split(',') : [],
+        type: 'drink',
+        doneDate: new Date(),
+      }];
+    }
+    // storage[where] = {
+    //   ...storage[where],
+    //   [id]: checked.map((el) => el.ingredient),
+    // };
+    saveItem('doneRecipes', storage);
+    history.push('/done-recipes');
   }
 
   return (
@@ -167,7 +210,7 @@ function RecipeInProgress(props) {
           left: '50%',
           transform: 'translateX(-50%)',
         } }
-        // onClick={ () => setRedirect(true) }
+        onClick={ () => handleFinishRecipe() }
       >
         Finish Recipe
       </button>
