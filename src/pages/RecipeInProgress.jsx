@@ -16,6 +16,7 @@ function RecipeInProgress(props) {
   const [foodType, setFoodType] = useState(true);
   const [copy, setCopy] = useState(false);
   const [checked, setChecked] = useState([]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const { match: { params: { id }, url } } = props;
   const where = url.split('/')[1];
 
@@ -62,13 +63,20 @@ function RecipeInProgress(props) {
   }, []);
 
   function handleShare() {
-    clipboardCopy(`http://localhost:3000${id}/in-progress`);
+    clipboardCopy(`http://localhost:3000/${where}/${id}`);
     setCopy(true);
   }
 
   function handleChecked({ target }) {
     const checkTest = [...checked];
     checkTest[target.value].checked = !checked[target.value].checked;
+    const validBTn = checkTest.reduce((acc, curr) => {
+      const valid = acc && curr.checked;
+      return valid;
+    }, true);
+    setIsButtonDisabled(!validBTn);
+    console.log(validBTn);
+    // setIsButtonDisabled(!validBTn);
     setChecked(checkTest);
     const test3 = getItem('test');
     test3[where] = {
@@ -152,6 +160,7 @@ function RecipeInProgress(props) {
       <button
         type="button"
         data-testid="finish-recipe-btn"
+        disabled={ isButtonDisabled }
         style={ {
           position: 'fixed',
           bottom: '0',
