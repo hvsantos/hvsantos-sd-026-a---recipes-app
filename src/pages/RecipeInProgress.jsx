@@ -5,6 +5,7 @@ import clipboardCopy from 'clipboard-copy';
 import { DataContext } from '../context/DataContext';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import { getItem, saveItem } from '../components/localStorage';
 
 const arrTest = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
   '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
@@ -14,7 +15,7 @@ function RecipeInProgress(props) {
   const [recipeInfo, setRecipeInfo] = useState({});
   const [foodType, setFoodType] = useState(true);
   const [copy, setCopy] = useState(false);
-  const [checked, steChecked] = useState([]);
+  const [checked, setChecked] = useState([]);
   const { match: { params: { id }, url } } = props;
   const where = url.split('/')[1];
 
@@ -24,6 +25,9 @@ function RecipeInProgress(props) {
       : 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
 
     const getDataApi = async () => {
+      if (!getItem('test')) {
+        saveItem('test', { drinks: {}, meals: {} });
+      }
       const dataApi = await getFetch(fetchUrl + id);
       setRecipeInfo(dataApi[Object.keys(dataApi)][0]);
       setFoodType(Object.keys(dataApi)[0] === 'meals');
@@ -40,9 +44,19 @@ function RecipeInProgress(props) {
             arrCheck = [...arrCheck, checkList];
           }
         });
-        steChecked(arrCheck);
+        setChecked(arrCheck);
+        const test2 = getItem('test');
+        test2[where] = {
+          ...test2[where],
+          [id]: arrCheck,
+        };
+        saveItem('test', test2);
       };
-      check();
+      if (getItem('test')[where][id]) {
+        setChecked(getItem('test')[where][id]);
+      } else {
+        check();
+      }
     };
     getDataApi();
   }, []);
@@ -55,7 +69,14 @@ function RecipeInProgress(props) {
   function handleChecked({ target }) {
     const checkTest = [...checked];
     checkTest[target.value].checked = !checked[target.value].checked;
-    steChecked(checkTest);
+    setChecked(checkTest);
+    const test3 = getItem('test');
+    test3[where] = {
+      ...test3[where],
+      [id]: checkTest,
+    };
+    saveItem('test', test3);
+    console.log(where);
   }
 
   return (
@@ -108,7 +129,7 @@ function RecipeInProgress(props) {
                 checked && checked.map((item, index) => (
                   <label
                     key={ index }
-                    htmlFor="ingredient"
+                    htmlFor={ index }
                     data-testid={ `${index}-ingredient-step` }
                     style={ { textDecoration: item.checked
                       ? 'line-through solid rgb(0, 0, 0)' : '' } }
@@ -116,9 +137,10 @@ function RecipeInProgress(props) {
                     <input
                       type="checkbox"
                       name="ingredient"
+                      id={ index }
                       value={ index }
                       checked={ item.checked }
-                      onClick={ handleChecked }
+                      onChange={ handleChecked }
                     />
                     { `${item.measure} ${item.ingredient}` }
                   </label>
