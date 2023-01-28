@@ -91,11 +91,7 @@ function RecipeInProgress(props) {
     if (!getItem('doneRecipes')) {
       saveItem('doneRecipes', []);
     }
-    // const recipe = checked.map((el) => el.ingredient);
     let storage = getItem('doneRecipes');
-    // console.log(recipeInfo.strTags.split(','));
-    console.log(recipeInfo.strTags);
-    // const tag = recipeInfo.strTags ? recipeInfo.strTags(() => {})
     if (where === 'meals') {
       storage = [...storage, {
         alcoholicOrNot: '',
@@ -121,10 +117,6 @@ function RecipeInProgress(props) {
         doneDate: new Date(),
       }];
     }
-    // storage[where] = {
-    //   ...storage[where],
-    //   [id]: checked.map((el) => el.ingredient),
-    // };
     saveItem('doneRecipes', storage);
     history.push('/done-recipes');
   }
