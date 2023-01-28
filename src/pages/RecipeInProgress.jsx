@@ -6,12 +6,16 @@ import { useHistory } from 'react-router-dom';
 import { DataContext } from '../context/DataContext';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import { getItem, saveItem } from '../components/localStorage';
+// import handleFavorites from '../hooks/UseFavorite';
+import useFavorites from '../hooks/UseFavorite';
 
 const arrTest = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
   '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
 
 function RecipeInProgress(props) {
+  const { isFavorite, handleFavorites, hasFavorite } = useFavorites(false);
   const history = useHistory();
   const { getFetch } = useContext(DataContext);
   const [recipeInfo, setRecipeInfo] = useState({});
@@ -26,14 +30,13 @@ function RecipeInProgress(props) {
     const fetchUrl = where === 'meals'
       ? 'https://www.themealdb.com/api/json/v1/1/lookup.php?i='
       : 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
-
     const getDataApi = async () => {
       if (!getItem('test')) {
         saveItem('test', { drinks: {}, meals: {} });
       }
       const dataApi = await getFetch(fetchUrl + id);
+      hasFavorite(dataApi[Object.keys(dataApi)][0], where);
       setRecipeInfo(dataApi[Object.keys(dataApi)][0]);
-      console.log(dataApi[Object.keys(dataApi)][0]);
       setFoodType(Object.keys(dataApi)[0] === 'meals');
       const dataApitest = dataApi[Object.keys(dataApi)][0];
       const check = () => {
@@ -50,10 +53,7 @@ function RecipeInProgress(props) {
         });
         setChecked(arrCheck);
         const test2 = getItem('test');
-        test2[where] = {
-          ...test2[where],
-          [id]: arrCheck,
-        };
+        test2[where] = { ...test2[where], [id]: arrCheck };
         saveItem('test', test2);
       };
       if (getItem('test')[where][id]) {
@@ -73,17 +73,11 @@ function RecipeInProgress(props) {
   function handleChecked({ target }) {
     const checkTest = [...checked];
     checkTest[target.value].checked = !checked[target.value].checked;
-    const validBTn = checkTest.reduce((acc, curr) => {
-      const valid = acc && curr.checked;
-      return valid;
-    }, true);
+    const validBTn = checkTest.reduce((acc, curr) => acc && curr.checked, true);
     setIsButtonDisabled(!validBTn);
     setChecked(checkTest);
     const test3 = getItem('test');
-    test3[where] = {
-      ...test3[where],
-      [id]: checkTest,
-    };
+    test3[where] = { ...test3[where], [id]: checkTest };
     saveItem('test', test3);
   }
 
@@ -92,33 +86,24 @@ function RecipeInProgress(props) {
       saveItem('doneRecipes', []);
     }
     let storage = getItem('doneRecipes');
-    if (where === 'meals') {
-      storage = [...storage, {
-        alcoholicOrNot: '',
-        id: recipeInfo.idMeal,
-        nationality: recipeInfo.strArea ? recipeInfo.strArea : '',
-        name: recipeInfo.strMeal,
-        category: recipeInfo.strCategory ? recipeInfo.strCategory : '',
-        image: recipeInfo.strMealThumb,
-        tags: recipeInfo.strTags ? recipeInfo.strTags.split(',') : '',
-        type: 'meal',
-        doneDate: new Date(),
-      }];
-    } else {
-      storage = [...storage, {
-        alcoholicOrNot: recipeInfo.strAlcoholic,
-        id: recipeInfo.idDrink,
-        nationality: recipeInfo.strArea ? recipeInfo.strArea : '',
-        name: recipeInfo.strDrink,
-        category: recipeInfo.strCategory ? recipeInfo.strCategory : '',
-        image: recipeInfo.strDrinkThumb,
-        tags: recipeInfo.strTags ? recipeInfo.strTags.split(',') : [],
-        type: 'drink',
-        doneDate: new Date(),
-      }];
-    }
+    const type = where === 'meals';
+    storage = [...storage, {
+      alcoholicOrNot: type ? '' : recipeInfo.strAlcoholic,
+      id: recipeInfo[type ? 'idMeal' : 'idDrink'],
+      nationality: recipeInfo.strArea ? recipeInfo.strArea : '',
+      name: recipeInfo[type ? 'strMeal' : 'strDrink'],
+      category: recipeInfo.strCategory ? recipeInfo.strCategory : '',
+      image: recipeInfo[type ? 'strMealThumb' : 'strDrinkThumb'],
+      tags: recipeInfo.strTags ? recipeInfo.strTags.split(',') : [],
+      type: type ? 'meal' : 'drink',
+      doneDate: new Date(),
+    }];
     saveItem('doneRecipes', storage);
     history.push('/done-recipes');
+  }
+
+  function handleFav() {
+    handleFavorites(recipeInfo, where);
   }
 
   return (
@@ -133,16 +118,23 @@ function RecipeInProgress(props) {
           alt="share-button"
         />
       </button>
-      <button
+      <input
+        type="image"
+        data-testid="favorite-btn"
+        onClick={ handleFav }
+        src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+        alt="favorite-button"
+      />
+      {/* <button
         type="button"
         data-testid="favorite-btn"
-        // onClick={ () => handleFavorite(recipe[where][0], where) }
+        onClick={ handleFav }
       >
         <img
-          src={ whiteHeartIcon }
+          src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
           alt="favorite-button"
         />
-      </button>
+      </button> */}
       { copy ? <p>Link copied!</p> : '' }
       {
         recipeInfo && (

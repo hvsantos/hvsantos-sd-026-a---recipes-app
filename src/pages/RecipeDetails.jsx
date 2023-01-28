@@ -5,10 +5,11 @@ import clipboardCopy from 'clipboard-copy';
 import { DataContext } from '../context/DataContext';
 import MealDetail from '../components/screens/RecipeDetails/MealDetail';
 import DrinksDetails from '../components/screens/RecipeDetails/DrinksDetail';
-import { saveItem, getItem } from '../components/localStorage';
+// import { saveItem, getItem } from '../components/localStorage';
 import Loading from '../components/Loading';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import handleFavorites from '../hooks/UseFavorite';
 
 function RecipeDetails(props) {
   const { recipe, setRecipe } = useContext(DataContext);
@@ -36,24 +37,24 @@ function RecipeDetails(props) {
     // }, timeAlert);
   }
 
-  function handleFavorite(obj, tag) {
-    const compare = tag === 'meals';
-    const newFavorite = {
-      id: obj[compare ? 'idMeal' : 'idDrink'],
-      name: obj[compare ? 'strMeal' : 'strDrink'],
-      image: obj[compare ? 'strMealThumb' : 'strDrinkThumb'],
-      type: tag.replace('s', ''),
-      nationality: obj.strArea ?? '',
-      alcoholicOrNot: obj.strAlcoholic ?? '',
-      category: obj.strCategory,
-    };
-    let savedFavorites = getItem('favoriteRecipes');
-    savedFavorites = savedFavorites
-      ? [...savedFavorites, newFavorite]
-      : [newFavorite];
-    saveItem('favoriteRecipes', savedFavorites);
-    console.log(savedFavorites);
-  }
+  // function handleFavorite(obj, tag) {
+  //   const compare = tag === 'meals';
+  //   const newFavorite = {
+  //     id: obj[compare ? 'idMeal' : 'idDrink'],
+  //     name: obj[compare ? 'strMeal' : 'strDrink'],
+  //     image: obj[compare ? 'strMealThumb' : 'strDrinkThumb'],
+  //     type: tag.replace('s', ''),
+  //     nationality: obj.strArea ?? '',
+  //     alcoholicOrNot: obj.strAlcoholic ?? '',
+  //     category: obj.strCategory,
+  //   };
+  //   let savedFavorites = getItem('favoriteRecipes');
+  //   savedFavorites = savedFavorites
+  //     ? [...savedFavorites, newFavorite]
+  //     : [newFavorite];
+  //   saveItem('favoriteRecipes', savedFavorites);
+  //   console.log(savedFavorites);
+  // }
 
   if (!recipe) {
     return <Loading />;
@@ -87,12 +88,11 @@ function RecipeDetails(props) {
         <button
           type="button"
           data-testid="favorite-btn"
-          onClick={ () => handleFavorite(recipe[where][0], where) }
+          onClick={ () => handleFavorites(recipe[where][0], where) }
         >
           <img
             src={ whiteHeartIcon }
             alt="favorite-button"
-
           />
         </button>
       </div>
