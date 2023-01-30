@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import usePageName from '../hooks/usePageName';
 import { saveItem, getItem } from '../components/localStorage';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
-import { Link } from 'react-router-dom';
 
 function FavoriteRecipes() {
   const pageName = usePageName();
