@@ -4,7 +4,6 @@ import Header from '../components/Header';
 import usePageName from '../hooks/usePageName';
 import { saveItem, getItem } from '../components/localStorage';
 import shareIcon from '../images/shareIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 // import useFavorites from '../hooks/UseFavorite';
 
@@ -27,6 +26,13 @@ function FavoriteRecipes() {
     const where = type === 'meal' ? 'meals' : 'drinks';
     clipboardCopy(`http://localhost:3000/${where}/${id}`);
     setCopy(true);
+  }
+
+  function handleNotFavorite(id) {
+    const control = favorites;
+    const filteredFavorite = control.filter((el) => el.id !== id);
+    saveItem('favoriteRecipes', filteredFavorite);
+    setFavorites(filteredFavorite);
   }
 
   console.log(favorites);
@@ -80,7 +86,7 @@ function FavoriteRecipes() {
             <input
               type="image"
               data-testid={ `${index}-horizontal-favorite-btn` }
-              // onClick={ handleFav }
+              onClick={ () => handleNotFavorite(el.id) }
               src={ blackHeartIcon }
               alt="favorite-button"
             />
