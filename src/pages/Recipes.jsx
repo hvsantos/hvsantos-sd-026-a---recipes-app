@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import usePageName from '../hooks/usePageName';
 import { DataContext } from '../context/DataContext';
-import RecipesDrinks from '../components/RecipesDrinks';
-import RecipesMeals from '../components/RecipesMeals';
 import FilterTypes from '../components/FilterTypes';
 
 const NUMBER12 = 12;
@@ -14,10 +12,9 @@ const NUMBER9 = 9;
 
 function Recipes() {
   const [filtersData, setFiltersData] = useState([]);
-  const [foodType, setFoodType] = useState(true);
   const { isLoading, getFetch, filter, isFilter, setIsFilter,
     setFilter, dataApi, setDataApi, filterResult, setFilterResult,
-  } = useContext(DataContext);
+    isFilterSearchBar } = useContext(DataContext);
   const id = useParams();
   const pageName = usePageName();
 
@@ -31,7 +28,7 @@ function Recipes() {
           dataFilters.meals.splice(NUMBER5, NUMBER9);
           setDataApi(data.meals);
           setFiltersData(dataFilters.meals);
-          setFoodType(true);
+          setIsFilter(false);
         }
       }
       if (id.id === 'drinks') {
@@ -42,7 +39,7 @@ function Recipes() {
           dataFilters.drinks.splice(NUMBER5, NUMBER9);
           setDataApi(data.drinks);
           setFiltersData(dataFilters.drinks);
-          setFoodType(false);
+          setIsFilter(false);
         }
       }
     };
@@ -69,6 +66,11 @@ function Recipes() {
   };
 
   useEffect(() => {
+    setFilterResult(isFilterSearchBar);
+    setIsFilter(!!isFilterSearchBar);
+  }, [isFilterSearchBar]);
+
+  useEffect(() => {
     if (filter) {
       getDataFilterResult();
     }
@@ -91,8 +93,49 @@ function Recipes() {
         All
       </button>
       { isLoading && <h2>Loading...</h2> }
-      { foodType ? <RecipesMeals dataApi={ isFilter ? filterResult : dataApi } />
-        : <RecipesDrinks dataApi={ isFilter ? filterResult : dataApi } /> }
+      {/* { foodType ? <RecipesMeals dataApi={ isFilter ? filterResult : dataApi } />
+        : <RecipesDrinks dataApi={ isFilter ? filterResult : dataApi } /> } */}
+      {
+        !isFilter ? dataApi.map((food, index) => (
+          <Link
+            to={ `/${id.id}/${id.id === 'meals' ? food.idMeal : food.idDrink}` }
+            key={ index }
+          >
+            <div
+              data-testid={ `${index}-recipe-card` }
+            >
+              <p data-testid={ `${index}-card-name` }>
+                { id.id === 'meals' ? food.strMeal : food.strDrink }
+              </p>
+              <img
+                src={ id.id === 'meals' ? food.strMealThumb : food.strDrinkThumb }
+                alt={ food.id }
+                width="100px"
+                data-testid={ `${index}-card-img` }
+              />
+            </div>
+          </Link>
+        )) : filterResult.map((food, index) => (
+          <Link
+            to={ `/${id.id}/${id.id === 'meals' ? food.idMeal : food.idDrink}` }
+            key={ index }
+          >
+            <div
+              data-testid={ `${index}-recipe-card` }
+            >
+              <p data-testid={ `${index}-card-name` }>
+                { id.id === 'meals' ? food.strMeal : food.strDrink }
+              </p>
+              <img
+                src={ id.id === 'meals' ? food.strMealThumb : food.strDrinkThumb }
+                alt={ food.id }
+                width="100px"
+                data-testid={ `${index}-card-img` }
+              />
+            </div>
+          </Link>
+        ))
+      }
     </div>
   );
 }
