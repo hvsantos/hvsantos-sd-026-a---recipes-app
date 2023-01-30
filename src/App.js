@@ -15,6 +15,7 @@ function App() {
   return (
     <Switch>
       <Route exact path="/" component={ Login } />
+      <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
       <Route exact path="/meals/:id" component={ RecipeDetails } />
       <Route exact path="/drinks/:id" component={ RecipeDetails } />
       <Route exact path="/:id" component={ Recipes } />
@@ -30,7 +31,6 @@ function App() {
         component={ RecipeInProgress }
       />
       <Route exact path="/done-recipes" component={ DoneRecipes } />
-      <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
       <Route exact path="/profile" component={ Profile } />
     </Switch>
   );

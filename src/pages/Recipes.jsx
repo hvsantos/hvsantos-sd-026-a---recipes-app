@@ -51,7 +51,6 @@ function Recipes() {
   }, [id]);
 
   const getDataFilterResult = async () => {
-    console.log(filter);
     if (id.id === 'meals') {
       const data = await getFetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${filter}`);
       if (data.meals) {
