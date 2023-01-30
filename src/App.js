@@ -18,8 +18,9 @@ function App() {
       <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
       <Route exact path="/meals/:id" component={ RecipeDetails } />
       <Route exact path="/drinks/:id" component={ RecipeDetails } />
-      <Route exact path="/:id" component={ Recipes } />
-      <Route exact path="/:id" component={ Recipes } />
+      <Route exact path="/done-recipes" component={ DoneRecipes } />
+      <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
+      <Route exact path="/profile" component={ Profile } />
       <Route
         exact
         path="/meals/:id/in-progress"
@@ -30,8 +31,8 @@ function App() {
         path="/drinks/:id/in-progress"
         component={ RecipeInProgress }
       />
-      <Route exact path="/done-recipes" component={ DoneRecipes } />
-      <Route exact path="/profile" component={ Profile } />
+      <Route exact path="/:id" component={ Recipes } />
+      <Route exact path="/:id" component={ Recipes } />
     </Switch>
   );
 }
