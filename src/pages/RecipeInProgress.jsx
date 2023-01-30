@@ -31,8 +31,8 @@ function RecipeInProgress(props) {
       ? 'https://www.themealdb.com/api/json/v1/1/lookup.php?i='
       : 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
     const getDataApi = async () => {
-      if (!getItem('test')) {
-        saveItem('test', { drinks: {}, meals: {} });
+      if (!getItem('inProgressRecipes')) {
+        saveItem('inProgressRecipes', { drinks: {}, meals: {} });
       }
       const dataApi = await getFetch(fetchUrl + id);
       hasFavorite(dataApi[Object.keys(dataApi)][0], where);
@@ -52,12 +52,12 @@ function RecipeInProgress(props) {
           }
         });
         setChecked(arrCheck);
-        const test2 = getItem('test');
+        const test2 = getItem('inProgressRecipes');
         test2[where] = { ...test2[where], [id]: arrCheck };
-        saveItem('test', test2);
+        saveItem('inProgressRecipes', test2);
       };
-      if (getItem('test')[where][id]) {
-        setChecked(getItem('test')[where][id]);
+      if (getItem('inProgressRecipes')[where][id]) {
+        setChecked(getItem('inProgressRecipes')[where][id]);
       } else {
         check();
       }
@@ -76,9 +76,9 @@ function RecipeInProgress(props) {
     const validBTn = checkTest.reduce((acc, curr) => acc && curr.checked, true);
     setIsButtonDisabled(!validBTn);
     setChecked(checkTest);
-    const test3 = getItem('test');
+    const test3 = getItem('inProgressRecipes');
     test3[where] = { ...test3[where], [id]: checkTest };
-    saveItem('test', test3);
+    saveItem('inProgressRecipes', test3);
   }
 
   function handleFinishRecipe() {
