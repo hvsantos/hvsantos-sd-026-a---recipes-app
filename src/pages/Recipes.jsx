@@ -13,12 +13,11 @@ const NUMBER5 = 5;
 const NUMBER9 = 9;
 
 function Recipes() {
-  const [dataApi, setDataApi] = useState([]);
   const [filtersData, setFiltersData] = useState([]);
   const [foodType, setFoodType] = useState(true);
   const { isLoading, getFetch, filter, isFilter, setIsFilter,
-    setFilter } = useContext(DataContext);
-  const [filterResult, setFilterResult] = useState([]);
+    setFilter, dataApi, setDataApi, filterResult, setFilterResult,
+  } = useContext(DataContext);
   const id = useParams();
   const pageName = usePageName();
 
