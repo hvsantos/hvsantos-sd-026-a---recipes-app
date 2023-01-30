@@ -55,8 +55,6 @@ function RecipeDetails(props) {
     return <Loading />;
   }
 
-  console.log(inProgress);
-
   if (redirect) {
     return <Redirect to={ `${url}/in-progress` } />;
   }
