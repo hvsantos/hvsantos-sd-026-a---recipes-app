@@ -11,8 +11,11 @@ function DataProvider({ children }) {
   const [isFilter, setIsFilter] = useState(false);
   const [recipe, setRecipe] = useState(null);
   const [filterResult, setFilterResult] = useState([]);
+  const [isFilterSearchBar, setIsFilterSearchBar] = useState([]);
 
   const contextValue = useMemo(() => ({
+    isFilterSearchBar,
+    setIsFilterSearchBar,
     filterResult,
     setFilterResult,
     dataApi,
@@ -25,7 +28,9 @@ function DataProvider({ children }) {
     setFilter,
     isFilter,
     setIsFilter,
-  }), [dataApi, setDataApi, isLoading, filter, setFilter, isFilter, recipe, setRecipe]);
+  }), [dataApi, setDataApi, isLoading, filter, setFilter, isFilter,
+    isFilterSearchBar, setIsFilterSearchBar, recipe, setRecipe, filterResult,
+    setFilterResult]);
 
   return (
     <DataContext.Provider value={ contextValue }>

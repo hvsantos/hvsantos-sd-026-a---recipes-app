@@ -8,7 +8,7 @@ function SearchInput() {
   const history = useHistory();
   const path = history.location.pathname;
 
-  const { setFilterResult, setIsFilter } = useContext(DataContext);
+  const { setIsFilterSearchBar } = useContext(DataContext);
 
   const mealOrDrinkApi = () => {
     if (path === '/meals') {
@@ -30,21 +30,19 @@ function SearchInput() {
     if (search === 'ingredient') {
       const response = await fetch(`https://www.${mealOrDrinkApi()}.com/api/json/v1/1/filter.php?i=${inputValue}`);
       const data = await response.json();
-      setIsFilter(true);
-      console.log(data);
-      setFilterResult(data[mealOrDrink()]);
+      console.log(data[mealOrDrink()]);
+      setIsFilterSearchBar(data[mealOrDrink()]);
     } if (search === 'name') {
       const response = await fetch(`https://www.${mealOrDrinkApi()}.com/api/json/v1/1/search.php?s=${inputValue}`);
       const data = await response.json();
-      setIsFilter(true);
-      setFilterResult(data[mealOrDrink()]);
+      setIsFilterSearchBar(data[mealOrDrink()]);
     } if (search === 'first-letter') {
       if (inputValue.length > 1) {
         global.alert('Your search must have only 1 (one) character');
       }
       const response = await fetch(`https://www.${mealOrDrinkApi()}.com/api/json/v1/1/search.php?f=${inputValue}`);
       const data = await response.json();
-      return data;
+      setIsFilterSearchBar(data[mealOrDrink()]);
     }
   };
 
