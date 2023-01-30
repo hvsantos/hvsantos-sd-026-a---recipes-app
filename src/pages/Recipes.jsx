@@ -13,12 +13,11 @@ const NUMBER5 = 5;
 const NUMBER9 = 9;
 
 function Recipes() {
-  const [dataApi, setDataApi] = useState([]);
   const [filtersData, setFiltersData] = useState([]);
   const [foodType, setFoodType] = useState(true);
   const { isLoading, getFetch, filter, isFilter, setIsFilter,
-    setFilter } = useContext(DataContext);
-  const [filterResult, setFilterResult] = useState([]);
+    setFilter, dataApi, setDataApi, filterResult, setFilterResult,
+  } = useContext(DataContext);
   const id = useParams();
   const pageName = usePageName();
 
@@ -51,7 +50,6 @@ function Recipes() {
   }, [id]);
 
   const getDataFilterResult = async () => {
-    console.log(filter);
     if (id.id === 'meals') {
       const data = await getFetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${filter}`);
       if (data.meals) {

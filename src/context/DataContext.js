@@ -5,12 +5,18 @@ import useFetch from '../hooks/useFetch';
 export const DataContext = createContext();
 
 function DataProvider({ children }) {
+  const [dataApi, setDataApi] = useState([]);
   const { isLoading, getFetch } = useFetch();
   const [filter, setFilter] = useState('');
   const [isFilter, setIsFilter] = useState(false);
   const [recipe, setRecipe] = useState(null);
+  const [filterResult, setFilterResult] = useState([]);
 
   const contextValue = useMemo(() => ({
+    filterResult,
+    setFilterResult,
+    dataApi,
+    setDataApi,
     setRecipe,
     recipe,
     isLoading,
@@ -19,7 +25,7 @@ function DataProvider({ children }) {
     setFilter,
     isFilter,
     setIsFilter,
-  }), [isLoading, filter, setFilter, isFilter, recipe, setRecipe]);
+  }), [dataApi, setDataApi, isLoading, filter, setFilter, isFilter, recipe, setRecipe]);
 
   return (
     <DataContext.Provider value={ contextValue }>
