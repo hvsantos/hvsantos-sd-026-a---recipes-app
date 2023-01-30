@@ -5,13 +5,18 @@ import clipboardCopy from 'clipboard-copy';
 import { DataContext } from '../context/DataContext';
 import MealDetail from '../components/screens/RecipeDetails/MealDetail';
 import DrinksDetails from '../components/screens/RecipeDetails/DrinksDetail';
-// import { saveItem, getItem } from '../components/localStorage';
 import Loading from '../components/Loading';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import handleFavorites from '../hooks/UseFavorite';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import useFavorites from '../hooks/UseFavorite';
+import useProgress from '../hooks/useProgress';
+import useDoneRecipe from '../hooks/useDoneRecipe';
 
 function RecipeDetails(props) {
+  const { isFavorite, handleFavorites, hasFavorite } = useFavorites(false);
+  const { inProgress, checkInProgress } = useProgress();
+  const { doneRecipe, checkDoneRecipe } = useDoneRecipe();
   const { recipe, setRecipe } = useContext(DataContext);
   const [redirect, setRedirect] = useState(false);
   const [copy, setCopy] = useState(false);
@@ -26,39 +31,31 @@ function RecipeDetails(props) {
     fetch(fetchUrl + id)
       .then((response) => response.json())
       .then((response) => setRecipe(response));
-  }, [url, id, where]);
+  }, [url, id, where, setRecipe]);
 
   function handleShare() {
-    // const timeAlert = 2000;
     clipboardCopy(`http://localhost:3000${url}`);
     setCopy(true);
+    // const timeAlert = 2000;
     // setTimeout(() => {
     //   setCopy(false);
     // }, timeAlert);
   }
 
-  // function handleFavorite(obj, tag) {
-  //   const compare = tag === 'meals';
-  //   const newFavorite = {
-  //     id: obj[compare ? 'idMeal' : 'idDrink'],
-  //     name: obj[compare ? 'strMeal' : 'strDrink'],
-  //     image: obj[compare ? 'strMealThumb' : 'strDrinkThumb'],
-  //     type: tag.replace('s', ''),
-  //     nationality: obj.strArea ?? '',
-  //     alcoholicOrNot: obj.strAlcoholic ?? '',
-  //     category: obj.strCategory,
-  //   };
-  //   let savedFavorites = getItem('favoriteRecipes');
-  //   savedFavorites = savedFavorites
-  //     ? [...savedFavorites, newFavorite]
-  //     : [newFavorite];
-  //   saveItem('favoriteRecipes', savedFavorites);
-  //   console.log(savedFavorites);
-  // }
+  useEffect(() => {
+    if (recipe) {
+      const savedRecipe = recipe[where][0];
+      hasFavorite(savedRecipe, where);
+      checkInProgress(savedRecipe, where);
+      checkDoneRecipe(savedRecipe, where);
+    }
+  }, [recipe, hasFavorite, where, checkInProgress, checkDoneRecipe]);
 
   if (!recipe) {
     return <Loading />;
   }
+
+  console.log(inProgress);
 
   if (redirect) {
     return <Redirect to={ `${url}/in-progress` } />;
@@ -85,33 +82,33 @@ function RecipeDetails(props) {
           />
         </button>
         { copy ? <p>Link copied!</p> : '' }
-        <button
-          type="button"
+        <input
+          type="image"
           data-testid="favorite-btn"
           onClick={ () => handleFavorites(recipe[where][0], where) }
-        >
-          <img
-            src={ whiteHeartIcon }
-            alt="favorite-button"
-          />
-        </button>
+          src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+          alt="favorite-button"
+        />
       </div>
       { where === 'meals'
         ? <MealDetail meal={ recipe.meals } />
         : <DrinksDetails drinks={ recipe.drinks } /> }
-      <button
-        type="button"
-        data-testid="start-recipe-btn"
-        style={ {
-          position: 'fixed',
-          bottom: '0',
-          left: '50%',
-          transform: 'translateX(-50%)',
-        } }
-        onClick={ () => setRedirect(true) }
-      >
-        Start Recipe
-      </button>
+      { doneRecipe ? ''
+        : (
+          <button
+            type="button"
+            data-testid="start-recipe-btn"
+            style={ {
+              position: 'fixed',
+              bottom: '0',
+              left: '50%',
+              transform: 'translateX(-50%)',
+            } }
+            onClick={ () => setRedirect(true) }
+          >
+            { inProgress ? 'Continue Recipe' : 'Start Recipe' }
+          </button>
+        ) }
     </div>
   );
 }

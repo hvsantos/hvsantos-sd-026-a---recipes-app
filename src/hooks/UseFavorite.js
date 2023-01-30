@@ -10,7 +10,7 @@ function useFavorites(control) {
     const valid = savedFavorites ? savedFavorites
       .find((el) => el.id === obj[compare ? 'idMeal' : 'idDrink']) : false;
     setIsFavorite(!!valid);
-    console.log(!!valid);
+    // console.log(!!valid);
   };
 
   const handleFavorites = (obj, tag) => {
@@ -31,10 +31,10 @@ function useFavorites(control) {
       const test = savedFavorites.filter((el) => el.id !== newFavorite.id);
       saveItem('favoriteRecipes', test);
       setIsFavorite(false);
-      console.log('test true');
+      // console.log('test true');
     } else {
       saveItem('favoriteRecipes', [...savedFavorites, newFavorite]);
-      console.log('teste falso');
+      // console.log('teste falso');
       setIsFavorite(true);
     }
   };
