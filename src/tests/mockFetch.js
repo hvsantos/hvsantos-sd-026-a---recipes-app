@@ -2,7 +2,7 @@ import meals from '../../cypress/mocks/meals';
 import mealCategories from '../../cypress/mocks/mealCategories';
 
 const MEALS = 'https://www.themealdb.com/api/json/v1/1/';
-const DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/';
+// const DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/';
 
 const mockFetch = (url) => Promise.resolve({
   status: 200,

@@ -1,14 +1,14 @@
-import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+// import React from 'react';
+// import { screen, waitFor } from '@testing-library/react';
 // import userEvent from '@testing-library/user-event';
-import { act } from 'react-dom/test-utils';
-import Recipes from '../pages/Recipes';
-import meals from '../../cypress/mocks/meals';
-import mealCategories from './mocks/mealCategory';
-import DataProvider from '../context/DataContext';
-import App from '../App';
-import renderWithRouter from './Render With Router/renderWithRouter';
-import mockFetch from './mockFetch';
+// import { act } from 'react-dom/test-utils';
+// import Recipes from '../pages/Recipes';
+// import meals from '../../cypress/mocks/meals';
+// import mealCategories from './mocks/mealCategory';
+// import DataProvider from '../context/DataContext';
+// import App from '../App';
+// import renderWithRouter from './Render With Router/renderWithRouter';
+// import mockFetch from './mockFetch';
 // import Login from '../pages/Login';
 
 describe('Testando a página de Recipes', () => {
