@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import usePageName from '../hooks/usePageName';
 import { DataContext } from '../context/DataContext';
 import FilterTypes from '../components/FilterTypes';
+import Footer from '../components/Footer';
 
 const NUMBER12 = 12;
 const NUMBER13 = 13;
@@ -136,6 +137,7 @@ function Recipes() {
           </Link>
         ))
       }
+      <Footer />
     </div>
   );
 }
