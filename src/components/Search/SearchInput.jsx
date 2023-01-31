@@ -1,27 +1,54 @@
 import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { DataContext } from '../../context/DataContext';
 
 function SearchInput() {
   const [search, setSearch] = useState('');
-
+  const id = useParams();
   const history = useHistory();
-  const path = history.location.pathname;
 
   const { setIsFilterSearchBar } = useContext(DataContext);
 
   const mealOrDrinkApi = () => {
-    if (path === '/meals') {
+    if (id.id === 'meals') {
       return 'themealdb';
-    } if (path === '/drinks') {
+    } if (id.id === 'drinks') {
       return 'thecocktaildb';
     }
   };
   const mealOrDrink = () => {
-    if (path === '/meals') {
+    if (id.id === 'meals') {
       return 'meals';
-    } if (path === '/drinks') {
+    } if (id.id === 'drinks') {
       return 'drinks';
+    }
+  };
+
+  const idMealOrDrink = () => {
+    if (id.id === 'meals') {
+      return 'idMeal';
+    } if (id.id === 'drinks') {
+      return 'idDrink';
+    }
+  };
+
+  const testResults = (dataResults) => {
+    const NUMBER12 = 12;
+    console.log(dataResults);
+    if (dataResults[mealOrDrink()] === null) {
+      const alert = ('Sorry, we haven\'t found any recipes for these filters.');
+      global.alert(alert);
+    } else if (dataResults[mealOrDrink()] !== null) {
+      switch (dataResults[mealOrDrink()].length) {
+      case 1:
+        history.push(
+          `/${mealOrDrink()}/${dataResults[mealOrDrink()][0][idMealOrDrink()]}`,
+        );
+        break;
+      default:
+        setIsFilterSearchBar(dataResults[mealOrDrink()].slice(0, NUMBER12));
+        break;
+      }
     }
   };
 
@@ -30,12 +57,11 @@ function SearchInput() {
     if (search === 'ingredient') {
       const response = await fetch(`https://www.${mealOrDrinkApi()}.com/api/json/v1/1/filter.php?i=${inputValue}`);
       const data = await response.json();
-      console.log(data[mealOrDrink()]);
-      setIsFilterSearchBar(data[mealOrDrink()]);
+      testResults(data);
     } if (search === 'name') {
       const response = await fetch(`https://www.${mealOrDrinkApi()}.com/api/json/v1/1/search.php?s=${inputValue}`);
       const data = await response.json();
-      setIsFilterSearchBar(data[mealOrDrink()]);
+      testResults(data);
     } if (search === 'first-letter') {
       if (inputValue.length > 1) {
         global.alert('Your search must have only 1 (one) character');
