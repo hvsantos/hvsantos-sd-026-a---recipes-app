@@ -1,6 +1,7 @@
 import React from 'react';
 import usePageName from '../hooks/usePageName';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function Profile() {
   const pageName = usePageName();
@@ -8,6 +9,7 @@ function Profile() {
     <div>
       <Header pageName={ pageName } />
       Profile
+      <Footer />
     </div>
   );
 }
