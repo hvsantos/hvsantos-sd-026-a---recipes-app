@@ -13,7 +13,7 @@ const NUMBER9 = 9;
 
 function Recipes() {
   const [filtersData, setFiltersData] = useState([]);
-  const { isLoading, getFetch, filter, isFilter, setIsFilter,
+  const { getFetch, filter, isFilter, setIsFilter,
     setFilter, dataApi, setDataApi, filterResult, setFilterResult,
     isFilterSearchBar } = useContext(DataContext);
   const id = useParams();
@@ -93,7 +93,7 @@ function Recipes() {
       >
         All
       </button>
-      { isLoading && <h2>Loading...</h2> }
+      {/* { isLoading && <h2>Loading...</h2> } */}
       {/* { foodType ? <RecipesMeals dataApi={ isFilter ? filterResult : dataApi } />
         : <RecipesDrinks dataApi={ isFilter ? filterResult : dataApi } /> } */}
       {

@@ -10,7 +10,7 @@ function DoneRecipes() {
   const [filteredArr, setFilteredArr] = useState([]);
 
   useEffect(() => {
-    setDoneArr(getItem('doneRecipes'));
+    setDoneArr(getItem('doneRecipes') ? getItem('doneRecipes') : []);
   }, []);
 
   useEffect(() => {
@@ -27,9 +27,6 @@ function DoneRecipes() {
 
     setFilteredArr(checkType(btnOpt));
   }, [doneArr, btnOpt]);
-
-  console.log(btnOpt);
-  console.log(filteredArr);
 
   const pageName = usePageName();
   return (

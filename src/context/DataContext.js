@@ -6,7 +6,7 @@ export const DataContext = createContext();
 
 function DataProvider({ children }) {
   const [dataApi, setDataApi] = useState([]);
-  const { isLoading, getFetch } = useFetch();
+  const { getFetch } = useFetch();
   const [filter, setFilter] = useState('');
   const [isFilter, setIsFilter] = useState(false);
   const [recipe, setRecipe] = useState(null);
@@ -22,13 +22,12 @@ function DataProvider({ children }) {
     setDataApi,
     setRecipe,
     recipe,
-    isLoading,
     getFetch,
     filter,
     setFilter,
     isFilter,
     setIsFilter,
-  }), [dataApi, setDataApi, isLoading, filter, setFilter, isFilter,
+  }), [dataApi, setDataApi, filter, setFilter, isFilter,
     isFilterSearchBar, setIsFilterSearchBar, recipe, setRecipe, filterResult,
     setFilterResult]);
 
